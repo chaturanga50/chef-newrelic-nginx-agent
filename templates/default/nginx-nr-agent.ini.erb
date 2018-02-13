@@ -1,0 +1,44 @@
+# global settings
+
+[global] 
+newrelic_license_key=<%= node['newrelic']['license_key'] %>
+poll_interval=60
+
+# logging settings
+
+[loggers]
+keys=root
+
+[handlers]
+keys=consoleHandler,fileHandler
+
+[formatters]
+keys=simpleFormatter
+
+[logger_root]
+level=<%= node['newrelic']['logger'] %>
+handlers=consoleHandler,fileHandler
+
+[handler_consoleHandler]
+class=StreamHandler
+level=<%= node['newrelic']['logger'] %>
+formatter=simpleFormatter
+args=(sys.stdout,)
+
+[handler_fileHandler]
+class=FileHandler
+level=<%= node['newrelic']['logger'] %>
+formatter=simpleFormatter
+args=('/var/log/nginx-nr-agent.log','a',)
+
+[formatter_simpleFormatter]
+format=%(asctime)s %(name)s [%(levelname)s]: %(message)s
+datefmt=
+
+# data sources settings
+
+[source1]
+name=<%= node['newrelic']['app_name'] %>
+url=https://<%= node['newrelic']['site_url'] %>/_status
+http_user=<%= node['newrelic']['user_name'] %>
+http_pass=<%= node['newrelic']['password'] %>
